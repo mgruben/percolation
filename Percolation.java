@@ -23,7 +23,7 @@ public class Percolation {
     private int[][] id;
     private int[][] sz;
     private boolean[][] open;
-
+    private int n;
     
     /**
      * Initializes an n*n grid of blocked sites, to be opened in the
@@ -34,6 +34,7 @@ public class Percolation {
      */
     public Percolation(int n) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
+        this.n = n;
         id = new int[n+2][n+1];
         sz = new int[n+2][n+1];
         open = new boolean[n+2][n+1];
@@ -57,6 +58,18 @@ public class Percolation {
                 k++;
             }
         }
+    }
+    
+    /**
+     * Returns the initial ID of the site at the coordinate
+     * (row i, column j).
+     * 
+     * @param i
+     * @param j
+     * @return 
+     */
+    private int ijTo1D(int i, int j) {
+        return (i-1)*n + j;
     }
     
     
