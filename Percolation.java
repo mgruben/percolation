@@ -38,7 +38,6 @@ public class Percolation {
         id = new int[n+2][n+1];
         sz = new int[n+2][n+1];
         open = new boolean[n+2][n+1];
-        int k = 1;
         
         id[0][0] = 0; // virtual top site
         id[n+1][0] = n*n + 1; // virtual bottom site;
@@ -47,15 +46,15 @@ public class Percolation {
             id[0][j] = -1;
             id[n+1][j] = -1;
         }
+        
         for (int i = 1; i <= n; i++)
             id[i][0] = -1; // left-most column, except virtuals
         
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) { // main n*n grid
-                id[i][j] = k;
+                id[i][j] = ijTo1D(i, j);
                 sz[i][j] = 1;
                 open[i][j] = false;
-                k++;
             }
         }
     }
