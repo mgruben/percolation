@@ -29,7 +29,7 @@ public class Percolation {
     private WeightedQuickUnionUF uf;
     private boolean[][] open;
     private int n;
-    private int openTotal;
+    public int openTotal;
     
     /**
      * Initializes an n*n grid of blocked sites, to be opened in the
@@ -132,16 +132,6 @@ public class Percolation {
     }
     
     /**
-     * Returns the private variable open_total, for use in calculating
-     * the threshold of open sites when the grid first percolates.
-     * 
-     * @return 
-     */
-    public int getOpenTotal() {
-        return this.openTotal;
-    }
-    
-    /**
      * Return whether the n*n grid percolates.
      * That is, whether there is a full site in the bottom row.
      * 
@@ -170,8 +160,8 @@ public class Percolation {
             System.out.println(o);
             p.open(this_i, this_j);
         }
-        double threshold = (double) p.getOpenTotal() / (double) (n*n);
-        System.out.println(p.getOpenTotal());
+        double threshold = (double) p.openTotal / (double) (n*n);
+        System.out.println(p.openTotal);
         System.out.println(n);
         System.out.println(threshold);
     }
