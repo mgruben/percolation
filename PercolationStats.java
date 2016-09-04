@@ -2,6 +2,7 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
+import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 
 /*
@@ -53,15 +54,15 @@ public class PercolationStats {
     }
     
     public double stddev() {
-        return 1.0;
+        return StdStats.stddevp(this.thresholds);
     }
     
     public double confidenceLo() {
-        return 1.0;
+        return (mean() - (1.96 * stddev())) / sqrt(this.trials);
     }
     
     public double confidenceHi() {
-        return 1.0;
+        return (mean() + (1.96 * stddev())) / sqrt(this.trials);
     }
     
     public static void main(String[] args) {
