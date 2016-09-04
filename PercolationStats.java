@@ -20,14 +20,24 @@ import edu.princeton.cs.algs4.StdStats;
  */
 
 /**
- *
  * @author Michael <GrubenM@GMail.com>
+ * @written 2016-09-04
+ * 
+ * Class for generating statistics about multiple Percolation trials.
  */
 public class PercolationStats {
     private final int n;
     private final int trials;
     private final double[] thresholds;
     
+    /**
+     * Completes `trials` trials of `n`-by-`n` Percolation grids,
+     * recording the threshold fraction at which the grid first percolates.
+     * 
+     * @param n
+     * @param trials
+     * @throws IllegalArgumentException 
+     */
     public PercolationStats(int n, int trials) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         if (trials <= 0)
@@ -46,22 +56,54 @@ public class PercolationStats {
         }
     }
     
+    /**
+     * Calculates and returns the mean of the threshold fractions at which
+     * the grids first percolated in the given trial set.
+     * 
+     * @return 
+     */
     public double mean() {
         return StdStats.mean(this.thresholds);
     }
     
+    /**
+     * Calculates and returns the standard deviation of the threshold fractions
+     * at which the grids first percolated in the given trial set.
+     * 
+     * @return 
+     */
     public double stddev() {
         return StdStats.stddevp(this.thresholds);
     }
     
+    /**
+     * Calculates and returns the lower bound of the 95% confidence interval
+     * for the mean value calculated above.
+     * 
+     * @return 
+     */
     public double confidenceLo() {
         return mean() - (1.96 * stddev()) / Math.sqrt(this.trials);
     }
     
+    /**
+     * Calculates and returns the upper bound of the 95% confidence interval
+     * for the mean values calculated above.
+     * 
+     * @return 
+     */
     public double confidenceHi() {
         return mean() + (1.96 * stddev()) / Math.sqrt(this.trials);
     }
     
+    /**
+     * Conducts a number of trials on a specified grid size of Percolation
+     * objects.  Then, prints statistics regarding the threshold fraction
+     * at which percolation first occurred: first mean, then standard deviation,
+     * then the low and high 95% confidence intervals.
+     * 
+     * @param args n, trials
+     */
     public static void main(String[] args) {
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);

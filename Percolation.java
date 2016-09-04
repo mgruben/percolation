@@ -151,6 +151,15 @@ public class Percolation {
         return uf.connected(this.n*this.n + 1, 0);
     }
     
+    /**
+     * Instantiates a Percolation object, then randomly opens sites until
+     * percolation occurs.
+     * Then, prints the total number of open sites, the width
+     * (or, equivalently, the height) of the grid, and the threshold fraction
+     * at which percolation first occurred.
+     * 
+     * @param args n
+     */
     public static void main(String[] args) {
         int n = Integer.parseInt(args[0]);
         Percolation p = new Percolation(n);
