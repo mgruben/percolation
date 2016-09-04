@@ -117,28 +117,6 @@ public class Percolation {
     }
     
     /**
-     * Sets the root of the given index to the status of
-     * connected to the top row.
-     * 
-     * @param index
-     * @return 
-     */
-    private void connectTop(int index) {
-        toTop[uf.find(index)] = true;
-    }
-    
-    /**
-     * Sets the root of the given index to the status of
-     * connected to the bottom row.
-     * 
-     * @param index
-     * @return 
-     */
-    private void connectBottom(int index) {
-        toBottom[uf.find(index)] = true;
-    }
-    
-    /**
      * Returns the initial ID of the site at the coordinate
      * (row i, column j).
      * 
@@ -199,7 +177,6 @@ public class Percolation {
                 int neighborIndex = ijTo1D(i, j + 1);
                 topBottom = checkNeighbor(index, neighborIndex, topBottom);
             }
-            
             setTop(index, topBottom[0]);
             setBottom(index, topBottom[1]);
             if (isConnTop(index) && isConnBottom(index)) this.percolates = true;
