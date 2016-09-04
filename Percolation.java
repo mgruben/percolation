@@ -28,6 +28,8 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     private WeightedQuickUnionUF uf;
     private boolean[][] open;
+    private boolean[][] toTop;
+    private boolean[][] toBottom;
     private int n;
     private int openTotal;
     
@@ -62,6 +64,21 @@ public class Percolation {
         return (i - 1)*n + j;
     }
     
+    /**
+     * Ensures that the given (i, j) tuple is valid within the established
+     * n-by-n grid.
+     * @param i
+     * @param j
+     * @return 
+     */
+    private void validateIndex(int i, int j) {
+        if (i < 1 && j < 1)
+            throw new IndexOutOfBoundsException("i and j must be positive");
+        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
+        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
+        if (i > n) throw new IndexOutOfBoundsException("i is too large");
+        if (j > n) throw new IndexOutOfBoundsException("j is too large");
+    }
     
     /**
      * Changes the state of block (row i, column j) to open, if closed.
@@ -71,10 +88,7 @@ public class Percolation {
      * @throws IndexOutOfBoundsException 
      */
     public void open(int i, int j) {
-        if (i < 1 && j < 1)
-            throw new IndexOutOfBoundsException("i and j must be positive");
-        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
-        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
+        validateIndex(i, j);
         if (!this.open[i][j]) {
             this.open[i][j] = true;
             this.openTotal++;
@@ -101,15 +115,9 @@ public class Percolation {
      * @throws IndexOutOfBoundsException 
      */
     public boolean isOpen(int i, int j) {
-        if (i < 1 && j < 1)
-            throw new IndexOutOfBoundsException("i and j must be positive");
-        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
-        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-        if (i > n) throw new IndexOutOfBoundsException("i is too large");
-        if (j > n) throw new IndexOutOfBoundsException("j is too large");
+        validateIndex(i, j);
         return this.open[i][j];
     }
-    
     
     /**
      * Returns whether block (row i, column j) is full.
@@ -122,12 +130,7 @@ public class Percolation {
      * @throws IndexOutOfBoundsException 
      */
     public boolean isFull(int i, int j) {
-        if (i < 1 && j < 1)
-            throw new IndexOutOfBoundsException("i and j must be positive");
-        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
-        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-        if (i > n) throw new IndexOutOfBoundsException("i is too large");
-        if (j > n) throw new IndexOutOfBoundsException("j is too large");
+        validateIndex(i, j);
         return uf.connected(ijTo1D(i, j), 0);
     }
     
