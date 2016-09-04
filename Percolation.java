@@ -129,6 +129,9 @@ public class Percolation {
         return uf.connected(ijTo1D(i, j), 0);
     }
     
+    public int getOpenTotal() {
+        return this.open_total;
+    }
     
     /**
      * Return whether the n*n grid percolates.
