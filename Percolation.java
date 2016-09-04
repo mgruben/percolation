@@ -1,5 +1,5 @@
 
-import edu.princeton.cs.algs4.UF;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
@@ -23,7 +23,7 @@ import edu.princeton.cs.algs4.UF;
  * @author Michael <GrubenM@GMail.com>
  */
 public class Percolation {
-    private UF uf;
+    private WeightedQuickUnionUF uf;
     private boolean[][] open;
     private int n;
     
@@ -37,7 +37,7 @@ public class Percolation {
     public Percolation(int n) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
-        this.uf = new UF(this.n+2);
+        this.uf = new WeightedQuickUnionUF(this.n+2);
         open = new boolean[n+2][n+1];
                 
         for (int i = 1; i <= n; i++) {
