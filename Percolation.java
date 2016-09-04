@@ -27,9 +27,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  */
 public class Percolation {
     private WeightedQuickUnionUF uf;
-    private boolean[][] open;
-    private boolean[][] toTop;
-    private boolean[][] toBottom;
+    private boolean[] open;
+    private boolean[] toTop;
+    private boolean[] toBottom;
+    private boolean percolates;
     private int n;
     private int openTotal;
     
@@ -44,40 +45,57 @@ public class Percolation {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
         this.uf = new WeightedQuickUnionUF(this.n*this.n + 2);
-        open = new boolean[n][n];
-        toTop = new boolean[n][n];
-        toBottom = new boolean[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) { // main n*n grid
-                open[i][j] = false;
-                toTop[i][j] = false;
-                toBottom[i][j] = false;
-            }
+        this.open = new boolean[n * n];
+        this.toTop = new boolean[n * n];
+        this.toBottom = new boolean[n * n];
+        this.percolates = false;
+        for (int i = 0; i < n * n; i++) { // main n*n grid
+            open[i] = false;
+            toTop[i] = false;
+            toBottom[i] = false;
         }
     }
     
     /**
-     * Returns whether the site at the given (i, j) coordinate is connected
-     * to a site on the top row.
+     * Returns whether the root of the given index is connected to the top.
      * 
-     * @param i
-     * @param j
+     * @param index
      * @return 
      */
-    private boolean isConnectedToTop(int i, int j) {
-        return this.toTop[i - 1][j - 1];
+    private boolean isConnectedTop(int index) {
+        return toTop[uf.find(index)];
     }
     
     /**
-     * Returns whether the site at the given (i, j) coordinate is connected
-     * to a site on the bottom row.
+     * Returns whether the root of the given index is connected to the bottom.
      * 
-     * @param i
-     * @param j
+     * @param index
      * @return 
      */
-    private boolean isConnectedToBottom(int i, int j) {
-        return this.toBottom[i - 1][j - 1];
+    private boolean isConnectedBottom(int index) {
+        return toBottom[uf.find(index)];
+    }
+    
+    /**
+     * Sets the root of the given index to the status of
+     * connected to the top row.
+     * 
+     * @param index
+     * @return 
+     */
+    private void connectTop(int index) {
+        toTop[uf.find(index)] = true;
+    }
+    
+    /**
+     * Sets the root of the given index to the status of
+     * connected to the bottom row.
+     * 
+     * @param index
+     * @return 
+     */
+    private void connectBottom(int index) {
+        toBottom[uf.find(index)] = true;
     }
     
     /**
@@ -117,11 +135,13 @@ public class Percolation {
      */
     public void open(int i, int j) {
         validateIndex(i, j);
-        if (!this.open[i - 1][j - 1]) {
-            this.open[i - 1][j - 1] = true;
+        int index = ijTo1D(i, j);
+        if (!this.open[index]) {
+            this.open[index] = true;
             this.openTotal++;
-            if (i == 1) uf.union(ijTo1D(i, j), 0);
-            if (i == n) uf.union(ijTo1D(i, j), n*n + 1);
+            if (i == 1) connectTop(index);
+            if (i == n) connectBottom(index);
+            
             if ((i - 1 > 0) && (isOpen(i - 1, j)))
                 uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
             if ((i + 1 <= n) && (isOpen(i + 1, j)))
@@ -144,7 +164,7 @@ public class Percolation {
      */
     public boolean isOpen(int i, int j) {
         validateIndex(i, j);
-        return this.open[i - 1][j - 1];
+        return this.open[ijTo1D(i, j)];
     }
     
     /**
