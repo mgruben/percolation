@@ -58,16 +58,20 @@ public class PercolationStats {
     }
     
     public double confidenceLo() {
-        return (mean() - (1.96 * stddev())) / sqrt(this.trials);
+        return mean() - (1.96 * stddev()) / sqrt(this.trials);
     }
     
     public double confidenceHi() {
-        return (mean() + (1.96 * stddev())) / sqrt(this.trials);
+        return mean() + (1.96 * stddev()) / sqrt(this.trials);
     }
     
     public static void main(String[] args) {
-        int n = Integer.parseInt(args[0]);
-        int trials = Integer.parseInt(args[1]);
+        int n = 2;
+        int trials = 10000;
         PercolationStats ps = new PercolationStats(n, trials);
+        System.out.println("mean = " + ps.mean());
+        System.out.println("stddev = " + ps.stddev());
+        System.out.println("95% confidence interval = "
+            + ps.confidenceLo() + ", " + ps.confidenceHi());
     }
 }
