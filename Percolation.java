@@ -57,6 +57,30 @@ public class Percolation {
     }
     
     /**
+     * Returns whether the site at the given (i, j) coordinate is connected
+     * to a site on the top row.
+     * 
+     * @param i
+     * @param j
+     * @return 
+     */
+    private boolean isConnectedToTop(int i, int j) {
+        return this.toTop[i - 1][j - 1];
+    }
+    
+    /**
+     * Returns whether the site at the given (i, j) coordinate is connected
+     * to a site on the bottom row.
+     * 
+     * @param i
+     * @param j
+     * @return 
+     */
+    private boolean isConnectedToBottom(int i, int j) {
+        return this.toBottom[i - 1][j - 1];
+    }
+    
+    /**
      * Returns the initial ID of the site at the coordinate
      * (row i, column j).
      * 
