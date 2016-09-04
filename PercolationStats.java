@@ -50,9 +50,8 @@ public class PercolationStats {
             Percolation perc = new Percolation(this.n);
             this.openTotal = 0;
             while (!perc.percolates()) {
-                int this_i = StdRandom.uniform(1, n + 1);
-                int this_j = StdRandom.uniform(1, n + 1);
-                perc.open(this_i, this_j);
+                perc.open(StdRandom.uniform(1, n + 1),
+                        StdRandom.uniform(1, n + 1));
                 this.openTotal++;
             }
             thresholds[i] = this.openTotal / (double) (n*n);

@@ -154,11 +154,11 @@ public class Percolation {
         int n = Integer.parseInt(args[0]);
         Percolation p = new Percolation(n);
         while (!p.percolates()) {
-            int this_i = StdRandom.uniform(1, n + 1);
-            int this_j = StdRandom.uniform(1, n + 1);
-            String o = String.format("Opening (%d, %d)", this_i, this_j);
+            int i = StdRandom.uniform(1, n + 1);
+            int j = StdRandom.uniform(1, n + 1);
+            String o = String.format("Opening (%d, %d)", i, j);
             System.out.println(o);
-            p.open(this_i, this_j);
+            p.open(i, j);
         }
         double threshold = (double) p.openTotal / (double) (n*n);
         System.out.println(p.openTotal);
