@@ -1,3 +1,6 @@
+
+import edu.princeton.cs.algs4.UF;
+
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
  *
@@ -20,8 +23,7 @@
  * @author Michael <GrubenM@GMail.com>
  */
 public class Percolation {
-    private int[][] id;
-    private int[][] sz;
+    private UF uf;
     private boolean[][] open;
     private int n;
     
@@ -35,25 +37,11 @@ public class Percolation {
     public Percolation(int n) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
-        id = new int[n+2][n+1];
-        sz = new int[n+2][n+1];
+        this.uf = new UF(this.n+2);
         open = new boolean[n+2][n+1];
-        
-        id[0][0] = 0; // virtual top site
-        id[n+1][0] = n*n + 1; // virtual bottom site;
-        
-        for (int j = 1; j <= n; j++) { // top and bottom rows, except virtuals
-            id[0][j] = -1;
-            id[n+1][j] = -1;
-        }
-        
-        for (int i = 1; i <= n; i++)
-            id[i][0] = -1; // left-most column, except virtuals
-        
+                
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) { // main n*n grid
-                id[i][j] = ijTo1D(i, j);
-                sz[i][j] = 1;
                 open[i][j] = false;
             }
         }
@@ -84,7 +72,25 @@ public class Percolation {
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
         if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-        if (this.open[i][j] == false) this.open[i][j] = true;
+        if (this.open[i][j] == false) {
+            this.open[i][j] = true;
+            if (i == 1) uf.union(ijTo1D(i,j), 0);
+            else if (i == n) uf.union(ijTo1D(i,j), n+1);
+            else {
+                try {   // check left
+                    if (isOpen(i-1,j)) uf.union(ijTo1D(i-1,j), ijTo1D(i,j));
+                } catch (IndexOutOfBoundsException e) { }
+                try {   // check right
+                    if (isOpen(i+1,j)) uf.union(ijTo1D(i+1,j), ijTo1D(i,j));
+                } catch (IndexOutOfBoundsException e) { }
+                try {   // check down
+                    if (isOpen(i,j-1)) uf.union(ijTo1D(i,j-1), ijTo1D(i,j));
+                } catch (IndexOutOfBoundsException e) { }
+                try {   // check up
+                    if (isOpen(i,j+1)) uf.union(ijTo1D(i,j+1), ijTo1D(i,j));
+                } catch (IndexOutOfBoundsException e) { }
+            }
+        }
     }
     
     
