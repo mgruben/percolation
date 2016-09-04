@@ -27,6 +27,7 @@ public class Percolation {
     private WeightedQuickUnionUF uf;
     private boolean[][] open;
     private int n;
+    private int open_total;
     
     /**
      * Initializes an n*n grid of blocked sites, to be opened in the
@@ -75,6 +76,7 @@ public class Percolation {
         if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
         if (!this.open[i][j]) {
             this.open[i][j] = true;
+            this.open_total++;
             if (i == 1) uf.union(ijTo1D(i, j), 0);
             if (i - 1 > 0) if (isOpen(i - 1, j))
                 uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
@@ -139,6 +141,12 @@ public class Percolation {
     }
     
     public static void main(String[] args) {
-        Percolation p = new Percolation(Integer.parseInt(args[0]));
+        int n = 5;
+        Percolation p = new Percolation(n);
+        while (!p.percolates()) {
+            p.open(StdRandom.uniform(1, n + 1), StdRandom.uniform(1, n + 1));
+        }
+        double threshold = (double)p.open_total / (double)(n*n);
+        System.out.println(threshold);
     }
 }
