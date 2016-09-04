@@ -1,9 +1,7 @@
 
-import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 import static java.lang.Math.sqrt;
-import java.util.ArrayList;
 
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
