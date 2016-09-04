@@ -29,6 +29,7 @@ public class PercolationStats {
     private final int n;
     private final int trials;
     private final double[] thresholds;
+    private int openTotal = 0;
     
     /**
      * Completes `trials` trials of `n`-by-`n` Percolation grids,
@@ -47,12 +48,14 @@ public class PercolationStats {
         this.thresholds = new double[this.trials];
         for (int i = 0; i < this.trials; i++) {
             Percolation perc = new Percolation(this.n);
+            this.openTotal = 0;
             while (!perc.percolates()) {
                 int this_i = StdRandom.uniform(1, n + 1);
                 int this_j = StdRandom.uniform(1, n + 1);
                 perc.open(this_i, this_j);
+                this.openTotal++;
             }
-            thresholds[i] = perc.openTotal / (double) (n*n);
+            thresholds[i] = this.openTotal / (double) (n*n);
         }
     }
     
