@@ -39,9 +39,8 @@ public class Percolation {
     public Percolation(int n) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
-        this.uf = new WeightedQuickUnionUF(this.n*this.n + 1);
+        this.uf = new WeightedQuickUnionUF(this.n*this.n + 2);
         open = new boolean[n+2][n+1];
-                
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) { // main n*n grid
                 open[i][j] = false;
@@ -78,6 +77,7 @@ public class Percolation {
             this.open[i][j] = true;
             this.open_total++;
             if (i == 1) uf.union(ijTo1D(i, j), 0);
+            if (i == n) uf.union(ijTo1D(i, j), n*n + 1);
             if (i - 1 > 0) if (isOpen(i - 1, j))
                 uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
             if (i + 1 <= n) if (isOpen(i + 1, j))
@@ -137,16 +137,22 @@ public class Percolation {
      * @return 
      */
     public boolean percolates() {
-        return uf.connected(this.n, 0);
+        return uf.connected(this.n*this.n + 1, 0);
     }
     
     public static void main(String[] args) {
         int n = 5;
         Percolation p = new Percolation(n);
         while (!p.percolates()) {
-            p.open(StdRandom.uniform(1, n + 1), StdRandom.uniform(1, n + 1));
+            int this_i = StdRandom.uniform(1, n + 1);
+            int this_j = StdRandom.uniform(1, n + 1);
+            String o = String.format("Opening (%d, %d)", this_i, this_j);
+            System.out.println(o);
+            p.open(this_i, this_j);
         }
         double threshold = (double)p.open_total / (double)(n*n);
+        System.out.println(p.open_total);
+        System.out.println(n);
         System.out.println(threshold);
     }
 }
