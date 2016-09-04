@@ -29,7 +29,7 @@ public class Percolation {
     private WeightedQuickUnionUF uf;
     private boolean[][] open;
     private int n;
-    public int openTotal;
+    protected int openTotal;
     
     /**
      * Initializes an n*n grid of blocked sites, to be opened in the
