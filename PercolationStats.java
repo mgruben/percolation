@@ -46,15 +46,18 @@ public class PercolationStats {
         this.n = n;
         this.trials = trials;
         this.thresholds = new double[this.trials];
-        for (int i = 0; i < this.trials; i++) {
+        for (int k = 0; k < this.trials; k++) {
             Percolation perc = new Percolation(this.n);
             this.openTotal = 0;
             while (!perc.percolates()) {
-                perc.open(StdRandom.uniform(1, n + 1),
-                        StdRandom.uniform(1, n + 1));
-                this.openTotal++;
+                int i = StdRandom.uniform(1, n + 1);
+                int j = StdRandom.uniform(1, n + 1);
+                if (!perc.isOpen(i,j)) {
+                    perc.open(i, j);
+                    this.openTotal++;
+                }
             }
-            thresholds[i] = this.openTotal / (double) (n*n);
+            thresholds[k] = this.openTotal / (double) (n*n);
         }
     }
     
