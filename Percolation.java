@@ -72,22 +72,18 @@ public class Percolation {
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
         if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-        if (this.open[i][j] == false) {
+        if (!this.open[i][j]) {
             this.open[i][j] = true;
-            if (i == 1) uf.union(ijTo1D(i,j), 0);
-            if (i == n) uf.union(ijTo1D(i,j), n);
-            try {   // check left
-                if (isOpen(i-1,j)) uf.union(ijTo1D(i-1,j), ijTo1D(i,j));
-            } catch (IndexOutOfBoundsException e) { }
-            try {   // check right
-                if (isOpen(i+1,j)) uf.union(ijTo1D(i+1,j), ijTo1D(i,j));
-            } catch (IndexOutOfBoundsException e) { }
-            try {   // check down
-                if (isOpen(i,j-1)) uf.union(ijTo1D(i,j-1), ijTo1D(i,j));
-            } catch (IndexOutOfBoundsException e) { }
-            try {   // check up
-                if (isOpen(i,j+1)) uf.union(ijTo1D(i,j+1), ijTo1D(i,j));
-            } catch (IndexOutOfBoundsException e) { }
+            if (i == 1) uf.union(ijTo1D(i, j), 0);
+            if (i == n) uf.union(ijTo1D(i, j), n);
+            if (i - 1 > 0) if (isOpen(i - 1, j))
+                uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
+            if (i + 1 <= n) if (isOpen(i + 1, j))
+                uf.union(ijTo1D(i+1, j), ijTo1D(i, j));
+            if (j - 1 > 0) if (isOpen(i, j - 1))
+                uf.union(ijTo1D(i, j - 1), ijTo1D(i, j));
+            if (j + 1 <= n) if (isOpen(i, j + 1))
+                uf.union(ijTo1D(i, j + 1), ijTo1D(i, j));
         }
     }
     
@@ -128,7 +124,7 @@ public class Percolation {
         if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
         if (i > n) throw new IndexOutOfBoundsException("i is too large");
         if (j > n) throw new IndexOutOfBoundsException("j is too large");
-        return uf.connected(ijTo1D(i,j),0);
+        return uf.connected(ijTo1D(i, j), 0);
     }
     
     
@@ -139,7 +135,7 @@ public class Percolation {
      * @return 
      */
     public boolean percolates() {
-        return uf.connected(this.n,0);
+        return uf.connected(this.n, 0);
     }
     
     public static void main(String[] args) {
