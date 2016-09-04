@@ -38,7 +38,7 @@ public class Percolation {
     public Percolation(int n) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
-        this.uf = new WeightedQuickUnionUF(this.n*this.n+1);
+        this.uf = new WeightedQuickUnionUF(this.n*this.n + 1);
         open = new boolean[n+2][n+1];
                 
         for (int i = 1; i <= n; i++) {
@@ -57,7 +57,7 @@ public class Percolation {
      * @return 
      */
     private int ijTo1D(int i, int j) {
-        return (i-1)*n + j;
+        return (i - 1)*n + j;
     }
     
     
@@ -76,7 +76,6 @@ public class Percolation {
         if (!this.open[i][j]) {
             this.open[i][j] = true;
             if (i == 1) uf.union(ijTo1D(i, j), 0);
-            if (i == n) uf.union(ijTo1D(i, j), n);
             if (i - 1 > 0) if (isOpen(i - 1, j))
                 uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
             if (i + 1 <= n) if (isOpen(i + 1, j))
