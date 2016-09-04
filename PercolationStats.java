@@ -1,3 +1,6 @@
+
+import edu.princeton.cs.algs4.StdIn;
+
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
  *
@@ -20,8 +23,15 @@
  * @author Michael <GrubenM@GMail.com>
  */
 public class PercolationStats {
-    public PercolationStats(int n, int trials) {
-        
+    private final int n;
+    private final int trials;
+    
+    public PercolationStats(int n, int trials) throws IllegalArgumentException {
+        if (n <= 0) throw new IllegalArgumentException("n must be positive");
+        if (trials <= 0)
+            throw new IllegalArgumentException("trials must be positive");
+        this.n = n;
+        this.trials = trials;
     }
     
     public double mean() {
@@ -41,6 +51,7 @@ public class PercolationStats {
     }
     
     public static void main(String[] args) {
-        
+        int n = Integer.parseInt(args[0]);
+        int trials = Integer.parseInt(args[1]);
     }
 }
