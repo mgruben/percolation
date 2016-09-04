@@ -78,7 +78,7 @@ public class PercolationStats {
      * @return 
      */
     public double stddev() {
-        return StdStats.stddevp(this.thresholds);
+        return StdStats.stddev(this.thresholds);
     }
     
     /**
