@@ -126,7 +126,7 @@ public class Percolation {
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
         if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-
+        return uf.connected(ijTo1D(i,j),0);
     }
     
     
@@ -137,7 +137,7 @@ public class Percolation {
      * @return 
      */
     public boolean percolates() {
-
+        return uf.connected(this.n+1,0);
     }
     
     public static void main(String[] args) {
