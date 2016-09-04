@@ -98,13 +98,13 @@ public class Percolation {
             this.openTotal++;
             if (i == 1) uf.union(ijTo1D(i, j), 0);
             if (i == n) uf.union(ijTo1D(i, j), n*n + 1);
-            if (i - 1 > 0) if (isOpen(i - 1, j))
+            if ((i - 1 > 0) && (isOpen(i - 1, j)))
                 uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
-            if (i + 1 <= n) if (isOpen(i + 1, j))
+            if ((i + 1 <= n) && (isOpen(i + 1, j)))
                 uf.union(ijTo1D(i + 1, j), ijTo1D(i, j));
-            if (j - 1 > 0) if (isOpen(i, j - 1))
+            if ((j - 1 > 0) && (isOpen(i, j - 1)))
                 uf.union(ijTo1D(i, j - 1), ijTo1D(i, j));
-            if (j + 1 <= n) if (isOpen(i, j + 1))
+            if ((j + 1 <= n) && (isOpen(i, j + 1)))
                 uf.union(ijTo1D(i, j + 1), ijTo1D(i, j));
         }
     }
