@@ -56,13 +56,17 @@ public class Percolation {
         }
     }
     
+    private void checkNeighbor(int index, int neighborIndex) {
+        
+    }
+    
     /**
      * Returns whether the root of the given index is connected to the top.
      * 
      * @param index
      * @return 
      */
-    private boolean isConnectedTop(int index) {
+    private boolean isConnTop(int index) {
         return toTop[uf.find(index)];
     }
     
@@ -72,7 +76,7 @@ public class Percolation {
      * @param index
      * @return 
      */
-    private boolean isConnectedBottom(int index) {
+    private boolean isConnBottom(int index) {
         return toBottom[uf.find(index)];
     }
     
@@ -107,7 +111,7 @@ public class Percolation {
      * @return 
      */
     private int ijTo1D(int i, int j) {
-        return (i - 1)*n + j;
+        return (i - 1)*n + (j - 1);
     }
     
     /**
@@ -142,14 +146,35 @@ public class Percolation {
             if (i == 1) connectTop(index);
             if (i == n) connectBottom(index);
             
-            if ((i - 1 > 0) && (isOpen(i - 1, j)))
-                uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
-            if ((i + 1 <= n) && (isOpen(i + 1, j)))
+            if ((i - 1 > 0) && (isOpen(i - 1, j))) {
+                if (isConnTop(index) || isConnTop(ijTo1D(i - 1, j)))
+                    connectTop(index);
+                if (isConnBottom(index) || isConnBottom(ijTo1D(i - 1, j)))
+                    connectBottom(index);
+                uf.union(ijTo1D(i - 1, j), index);
+            }
+            if ((i + 1 <= n) && (isOpen(i + 1, j))) {
+                if (isConnTop(index) || isConnTop(ijTo1D(i + 1, j)))
+                    connectTop(index);
+                if (isConnBottom(index) || isConnBottom(ijTo1D(i + 1, j)))
+                    connectBottom(index);
                 uf.union(ijTo1D(i + 1, j), ijTo1D(i, j));
-            if ((j - 1 > 0) && (isOpen(i, j - 1)))
+            }
+            if ((j - 1 > 0) && (isOpen(i, j - 1))) {
+                if (isConnTop(index) || isConnTop(ijTo1D(i, j - 1)))
+                    connectTop(index);
+                if (isConnBottom(index) || isConnBottom(ijTo1D(i, j - 1)))
+                    connectBottom(index);
                 uf.union(ijTo1D(i, j - 1), ijTo1D(i, j));
-            if ((j + 1 <= n) && (isOpen(i, j + 1)))
+            }
+            if ((j + 1 <= n) && (isOpen(i, j + 1))) {
+                if (isConnTop(index) || isConnTop(ijTo1D(i, j + 1)))
+                    connectTop(index);
+                if (isConnBottom(index) || isConnBottom(ijTo1D(i, j + 1)))
+                    connectBottom(index);
                 uf.union(ijTo1D(i, j + 1), ijTo1D(i, j));
+            }
+            if (isConnTop(index) && isConnBottom(index)) this.percolates = true;
         }
     }
     
@@ -179,7 +204,7 @@ public class Percolation {
      */
     public boolean isFull(int i, int j) {
         validateIndex(i, j);
-        return uf.connected(ijTo1D(i, j), 0);
+        return isConnTop(ijTo1D(i, j));
     }
     
     /**
@@ -189,7 +214,7 @@ public class Percolation {
      * @return 
      */
     public boolean percolates() {
-        return uf.connected(this.n*this.n + 1, 0);
+        return this.percolates;
     }
     
     /**
