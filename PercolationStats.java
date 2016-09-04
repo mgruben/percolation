@@ -52,7 +52,7 @@ public class PercolationStats {
             while (!perc.percolates()) {
                 int i = StdRandom.uniform(1, n + 1);
                 int j = StdRandom.uniform(1, n + 1);
-                if (!perc.isOpen(i,j)) {
+                if (!perc.isOpen(i, j)) {
                     perc.open(i, j);
                     this.openTotal++;
                 }
