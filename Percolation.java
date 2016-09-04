@@ -161,7 +161,7 @@ public class Percolation {
             System.out.println(o);
             p.open(this_i, this_j);
         }
-        double threshold = (double)p.getOpenTotal() / (double)(n*n);
+        double threshold = (double) p.getOpenTotal() / (double) (n*n);
         System.out.println(p.getOpenTotal());
         System.out.println(n);
         System.out.println(threshold);
