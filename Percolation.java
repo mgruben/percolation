@@ -27,7 +27,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  */
 public class Percolation {
     private WeightedQuickUnionUF uf;
-    private boolean[][] open;
+    private boolean[] open;
+    private boolean[] toTop;
+    private boolean[] toBottom;
+    private boolean percolates;
     private int n;
     private int openTotal;
     
@@ -42,12 +45,75 @@ public class Percolation {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
         this.uf = new WeightedQuickUnionUF(this.n*this.n + 2);
-        open = new boolean[n+2][n+1];
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) { // main n*n grid
-                open[i][j] = false;
-            }
+        this.open = new boolean[n * n];
+        this.toTop = new boolean[n * n];
+        this.toBottom = new boolean[n * n];
+        this.percolates = false;
+        for (int i = 0; i < n * n; i++) { // main n*n grid
+            open[i] = false;
+            toTop[i] = false;
+            toBottom[i] = false;
         }
+    }
+    
+    /**
+     * Given the index of a site and the index of its directly-adjacent
+     * neighbor, checks to see if either site is connected to the top
+     * or to the bottom, unions the site and its neighbor, and returns
+     * connection flags as a boolean array.
+     * 
+     * @param index
+     * @param neighborIndex 
+     */
+    private boolean[] checkNeighbor(int index, int neighbor, boolean[] tb) {
+        if (isConnTop(index) || isConnTop(neighbor))
+            tb[0] = true;
+        if (isConnBottom(index) || isConnBottom(neighbor))
+            tb[1] = true;
+        uf.union(index, neighbor);
+        return tb;
+    }
+    
+    /**
+     * Returns whether the root of the given index is connected to the top.
+     * 
+     * @param index
+     * @return 
+     */
+    private boolean isConnTop(int index) {
+        return toTop[uf.find(index)];
+    }
+    
+    /**
+     * Returns whether the root of the given index is connected to the bottom.
+     * 
+     * @param index
+     * @return 
+     */
+    private boolean isConnBottom(int index) {
+        return toBottom[uf.find(index)];
+    }
+    
+    /**
+     * Sets whether the root of the given index is connected to the top.
+     * 
+     * @param index
+     * @param connected
+     * @return 
+     */
+    private void setTop(int index, boolean connected) {
+        toTop[uf.find(index)] = connected;
+    }
+    
+    /**
+     * Sets whether the root of the given index is connected to the bottom.
+     * 
+     * @param index
+     * @param connected
+     * @return 
+     */
+    private void setBottom(int index, boolean connected) {
+        toBottom[uf.find(index)] = connected;
     }
     
     /**
@@ -59,9 +125,24 @@ public class Percolation {
      * @return 
      */
     private int ijTo1D(int i, int j) {
-        return (i - 1)*n + j;
+        return (i - 1)*n + (j - 1);
     }
     
+    /**
+     * Ensures that the given (i, j) tuple is valid within the established
+     * n-by-n grid.
+     * @param i
+     * @param j
+     * @return 
+     */
+    private void validateIndex(int i, int j) {
+        if (i < 1 && j < 1)
+            throw new IndexOutOfBoundsException("i and j must be positive");
+        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
+        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
+        if (i > n) throw new IndexOutOfBoundsException("i is too large");
+        if (j > n) throw new IndexOutOfBoundsException("j is too large");
+    }
     
     /**
      * Changes the state of block (row i, column j) to open, if closed.
@@ -71,23 +152,34 @@ public class Percolation {
      * @throws IndexOutOfBoundsException 
      */
     public void open(int i, int j) {
-        if (i < 1 && j < 1)
-            throw new IndexOutOfBoundsException("i and j must be positive");
-        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
-        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-        if (!this.open[i][j]) {
-            this.open[i][j] = true;
+        validateIndex(i, j);
+        int index = ijTo1D(i, j);
+        if (!this.open[index]) {
+            boolean[] topBottom = {false, false};
+            this.open[index] = true;
             this.openTotal++;
-            if (i == 1) uf.union(ijTo1D(i, j), 0);
-            if (i == n) uf.union(ijTo1D(i, j), n*n + 1);
-            if (i - 1 > 0) if (isOpen(i - 1, j))
-                uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
-            if (i + 1 <= n) if (isOpen(i + 1, j))
-                uf.union(ijTo1D(i + 1, j), ijTo1D(i, j));
-            if (j - 1 > 0) if (isOpen(i, j - 1))
-                uf.union(ijTo1D(i, j - 1), ijTo1D(i, j));
-            if (j + 1 <= n) if (isOpen(i, j + 1))
-                uf.union(ijTo1D(i, j + 1), ijTo1D(i, j));
+            if (i == 1) topBottom[0] = true;
+            if (i == n) topBottom[1] = true;
+            
+            if ((i - 1 > 0) && (isOpen(i - 1, j))) {
+                int neighborIndex = ijTo1D(i - 1, j);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
+            }
+            if ((i + 1 <= n) && (isOpen(i + 1, j))) {
+                int neighborIndex = ijTo1D(i + 1, j);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
+            }
+            if ((j - 1 > 0) && (isOpen(i, j - 1))) {
+                int neighborIndex = ijTo1D(i, j - 1);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
+            }
+            if ((j + 1 <= n) && (isOpen(i, j + 1))) {
+                int neighborIndex = ijTo1D(i, j + 1);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
+            }
+            setTop(index, topBottom[0]);
+            setBottom(index, topBottom[1]);
+            if (isConnTop(index) && isConnBottom(index)) this.percolates = true;
         }
     }
     
@@ -101,15 +193,9 @@ public class Percolation {
      * @throws IndexOutOfBoundsException 
      */
     public boolean isOpen(int i, int j) {
-        if (i < 1 && j < 1)
-            throw new IndexOutOfBoundsException("i and j must be positive");
-        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
-        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-        if (i > n) throw new IndexOutOfBoundsException("i is too large");
-        if (j > n) throw new IndexOutOfBoundsException("j is too large");
-        return this.open[i][j];
+        validateIndex(i, j);
+        return this.open[ijTo1D(i, j)];
     }
-    
     
     /**
      * Returns whether block (row i, column j) is full.
@@ -122,13 +208,8 @@ public class Percolation {
      * @throws IndexOutOfBoundsException 
      */
     public boolean isFull(int i, int j) {
-        if (i < 1 && j < 1)
-            throw new IndexOutOfBoundsException("i and j must be positive");
-        if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
-        if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
-        if (i > n) throw new IndexOutOfBoundsException("i is too large");
-        if (j > n) throw new IndexOutOfBoundsException("j is too large");
-        return uf.connected(ijTo1D(i, j), 0);
+        validateIndex(i, j);
+        return isConnTop(ijTo1D(i, j));
     }
     
     /**
@@ -138,7 +219,7 @@ public class Percolation {
      * @return 
      */
     public boolean percolates() {
-        return uf.connected(this.n*this.n + 1, 0);
+        return this.percolates;
     }
     
     /**
