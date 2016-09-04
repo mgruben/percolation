@@ -42,7 +42,7 @@ public class PercolationStats {
                 int this_j = StdRandom.uniform(1, n + 1);
                 perc.open(this_i, this_j);
             }
-            thresholds[i] = perc.getOpenTotal() / (double)(n*n);
+            thresholds[i] = perc.getOpenTotal() / (double) (n*n);
         }
     }
     
