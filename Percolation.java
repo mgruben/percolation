@@ -56,8 +56,17 @@ public class Percolation {
         }
     }
     
+    /**
+     * 
+     * @param index
+     * @param neighborIndex 
+     */
     private void checkNeighbor(int index, int neighborIndex) {
-        
+        if (isConnTop(index) || isConnTop(neighborIndex))
+            connectTop(index);
+        if (isConnBottom(index) || isConnBottom(neighborIndex))
+            connectBottom(index);
+        uf.union(neighborIndex, index);
     }
     
     /**
@@ -147,32 +156,20 @@ public class Percolation {
             if (i == n) connectBottom(index);
             
             if ((i - 1 > 0) && (isOpen(i - 1, j))) {
-                if (isConnTop(index) || isConnTop(ijTo1D(i - 1, j)))
-                    connectTop(index);
-                if (isConnBottom(index) || isConnBottom(ijTo1D(i - 1, j)))
-                    connectBottom(index);
-                uf.union(ijTo1D(i - 1, j), index);
+                int neighborIndex = ijTo1D(i - 1, j);
+                checkNeighbor(index, neighborIndex);
             }
             if ((i + 1 <= n) && (isOpen(i + 1, j))) {
-                if (isConnTop(index) || isConnTop(ijTo1D(i + 1, j)))
-                    connectTop(index);
-                if (isConnBottom(index) || isConnBottom(ijTo1D(i + 1, j)))
-                    connectBottom(index);
-                uf.union(ijTo1D(i + 1, j), ijTo1D(i, j));
+                int neighborIndex = ijTo1D(i + 1, j);
+                checkNeighbor(index, neighborIndex);
             }
             if ((j - 1 > 0) && (isOpen(i, j - 1))) {
-                if (isConnTop(index) || isConnTop(ijTo1D(i, j - 1)))
-                    connectTop(index);
-                if (isConnBottom(index) || isConnBottom(ijTo1D(i, j - 1)))
-                    connectBottom(index);
-                uf.union(ijTo1D(i, j - 1), ijTo1D(i, j));
+                int neighborIndex = ijTo1D(i, j - 1);
+                checkNeighbor(index, neighborIndex);
             }
             if ((j + 1 <= n) && (isOpen(i, j + 1))) {
-                if (isConnTop(index) || isConnTop(ijTo1D(i, j + 1)))
-                    connectTop(index);
-                if (isConnBottom(index) || isConnBottom(ijTo1D(i, j + 1)))
-                    connectBottom(index);
-                uf.union(ijTo1D(i, j + 1), ijTo1D(i, j));
+                int neighborIndex = ijTo1D(i, j + 1);
+                checkNeighbor(index, neighborIndex);
             }
             if (isConnTop(index) && isConnBottom(index)) this.percolates = true;
         }
