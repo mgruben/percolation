@@ -57,6 +57,10 @@ public class Percolation {
     }
     
     /**
+     * Given the index of a site and the index of its directly-adjacent
+     * neighbor, checks to see if either site is connected to the top
+     * or to the bottom, unions the site and its neighbor, and returns
+     * connection flags as a boolean array.
      * 
      * @param index
      * @param neighborIndex 
@@ -174,6 +178,7 @@ public class Percolation {
                 int neighborIndex = ijTo1D(i, j + 1);
                 topBottom = checkNeighbor(index, neighborIndex);
             }
+            
             if (topBottom[0]) connectTop(index);
             if (topBottom[1]) connectBottom(index);
             if (isConnTop(index) && isConnBottom(index)) this.percolates = true;
