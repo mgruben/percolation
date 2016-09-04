@@ -75,21 +75,19 @@ public class Percolation {
         if (this.open[i][j] == false) {
             this.open[i][j] = true;
             if (i == 1) uf.union(ijTo1D(i,j), 0);
-            else {
-                if (i == n) uf.union(ijTo1D(i,j), n+1);
-                try {   // check left
-                    if (isOpen(i-1,j)) uf.union(ijTo1D(i-1,j), ijTo1D(i,j));
-                } catch (IndexOutOfBoundsException e) { }
-                try {   // check right
-                    if (isOpen(i+1,j)) uf.union(ijTo1D(i+1,j), ijTo1D(i,j));
-                } catch (IndexOutOfBoundsException e) { }
-                try {   // check down
-                    if (isOpen(i,j-1)) uf.union(ijTo1D(i,j-1), ijTo1D(i,j));
-                } catch (IndexOutOfBoundsException e) { }
-                try {   // check up
-                    if (isOpen(i,j+1)) uf.union(ijTo1D(i,j+1), ijTo1D(i,j));
-                } catch (IndexOutOfBoundsException e) { }
-            }
+            if (i == n) uf.union(ijTo1D(i,j), n+1);
+            try {   // check left
+                if (isOpen(i-1,j)) uf.union(ijTo1D(i-1,j), ijTo1D(i,j));
+            } catch (IndexOutOfBoundsException e) { }
+            try {   // check right
+                if (isOpen(i+1,j)) uf.union(ijTo1D(i+1,j), ijTo1D(i,j));
+            } catch (IndexOutOfBoundsException e) { }
+            try {   // check down
+                if (isOpen(i,j-1)) uf.union(ijTo1D(i,j-1), ijTo1D(i,j));
+            } catch (IndexOutOfBoundsException e) { }
+            try {   // check up
+                if (isOpen(i,j+1)) uf.union(ijTo1D(i,j+1), ijTo1D(i,j));
+            } catch (IndexOutOfBoundsException e) { }
         }
     }
     
