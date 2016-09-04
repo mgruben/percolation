@@ -20,8 +20,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  */
 
 /**
- *
  * @author Michael <GrubenM@GMail.com>
+ * @written 2016-09-03
+ * 
+ * Class for studying percolation in an arbitrarily-large grid of closed sites.
  */
 public class Percolation {
     private WeightedQuickUnionUF uf;
@@ -129,6 +131,12 @@ public class Percolation {
         return uf.connected(ijTo1D(i, j), 0);
     }
     
+    /**
+     * Returns the private variable open_total, for use in calculating
+     * the threshold of open sites when the grid first percolates.
+     * 
+     * @return 
+     */
     public int getOpenTotal() {
         return this.open_total;
     }
@@ -144,7 +152,7 @@ public class Percolation {
     }
     
     public static void main(String[] args) {
-        int n = 5;
+        int n = Integer.parseInt(args[0]);
         Percolation p = new Percolation(n);
         while (!p.percolates()) {
             int this_i = StdRandom.uniform(1, n + 1);
@@ -153,8 +161,8 @@ public class Percolation {
             System.out.println(o);
             p.open(this_i, this_j);
         }
-        double threshold = (double)p.open_total / (double)(n*n);
-        System.out.println(p.open_total);
+        double threshold = (double)p.getOpenTotal() / (double)(n*n);
+        System.out.println(p.getOpenTotal());
         System.out.println(n);
         System.out.println(threshold);
     }
