@@ -37,7 +37,7 @@ public class Percolation {
     public Percolation(int n) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
-        this.uf = new WeightedQuickUnionUF(this.n+2);
+        this.uf = new WeightedQuickUnionUF(this.n*this.n+1);
         open = new boolean[n+2][n+1];
                 
         for (int i = 1; i <= n; i++) {
@@ -75,7 +75,7 @@ public class Percolation {
         if (this.open[i][j] == false) {
             this.open[i][j] = true;
             if (i == 1) uf.union(ijTo1D(i,j), 0);
-            if (i == n) uf.union(ijTo1D(i,j), n+1);
+            if (i == n) uf.union(ijTo1D(i,j), n);
             try {   // check left
                 if (isOpen(i-1,j)) uf.union(ijTo1D(i-1,j), ijTo1D(i,j));
             } catch (IndexOutOfBoundsException e) { }
@@ -105,6 +105,8 @@ public class Percolation {
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
         if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
+        if (i > n) throw new IndexOutOfBoundsException("i is too large");
+        if (j > n) throw new IndexOutOfBoundsException("j is too large");
         return this.open[i][j];
     }
     
@@ -124,6 +126,8 @@ public class Percolation {
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
         if (j < 1) throw new IndexOutOfBoundsException("j must be positive");
+        if (i > n) throw new IndexOutOfBoundsException("i is too large");
+        if (j > n) throw new IndexOutOfBoundsException("j is too large");
         return uf.connected(ijTo1D(i,j),0);
     }
     
@@ -135,7 +139,7 @@ public class Percolation {
      * @return 
      */
     public boolean percolates() {
-        return uf.connected(this.n+1,0);
+        return uf.connected(this.n,0);
     }
     
     public static void main(String[] args) {
