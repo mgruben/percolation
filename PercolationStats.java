@@ -1,7 +1,6 @@
 
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import static java.lang.Math.sqrt;
 
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
@@ -56,11 +55,11 @@ public class PercolationStats {
     }
     
     public double confidenceLo() {
-        return mean() - (1.96 * stddev()) / sqrt(this.trials);
+        return mean() - (1.96 * stddev()) / Math.sqrt(this.trials);
     }
     
     public double confidenceHi() {
-        return mean() + (1.96 * stddev()) / sqrt(this.trials);
+        return mean() + (1.96 * stddev()) / Math.sqrt(this.trials);
     }
     
     public static void main(String[] args) {
