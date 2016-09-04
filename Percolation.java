@@ -61,12 +61,14 @@ public class Percolation {
      * @param index
      * @param neighborIndex 
      */
-    private void checkNeighbor(int index, int neighborIndex) {
+    private boolean[] checkNeighbor(int index, int neighborIndex) {
+        boolean[] topBottom = {false, false};
         if (isConnTop(index) || isConnTop(neighborIndex))
-            connectTop(index);
+            topBottom[0] = true;
         if (isConnBottom(index) || isConnBottom(neighborIndex))
-            connectBottom(index);
+            topBottom[1] = true;
         uf.union(neighborIndex, index);
+        return topBottom;
     }
     
     /**
@@ -150,6 +152,7 @@ public class Percolation {
         validateIndex(i, j);
         int index = ijTo1D(i, j);
         if (!this.open[index]) {
+            boolean[] topBottom = {false, false};
             this.open[index] = true;
             this.openTotal++;
             if (i == 1) connectTop(index);
@@ -157,20 +160,22 @@ public class Percolation {
             
             if ((i - 1 > 0) && (isOpen(i - 1, j))) {
                 int neighborIndex = ijTo1D(i - 1, j);
-                checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex);
             }
             if ((i + 1 <= n) && (isOpen(i + 1, j))) {
                 int neighborIndex = ijTo1D(i + 1, j);
-                checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex);
             }
             if ((j - 1 > 0) && (isOpen(i, j - 1))) {
                 int neighborIndex = ijTo1D(i, j - 1);
-                checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex);
             }
             if ((j + 1 <= n) && (isOpen(i, j + 1))) {
                 int neighborIndex = ijTo1D(i, j + 1);
-                checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex);
             }
+            if (topBottom[0]) connectTop(index);
+            if (topBottom[1]) connectBottom(index);
             if (isConnTop(index) && isConnBottom(index)) this.percolates = true;
         }
     }
