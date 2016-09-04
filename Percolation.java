@@ -65,14 +65,13 @@ public class Percolation {
      * @param index
      * @param neighborIndex 
      */
-    private boolean[] checkNeighbor(int index, int neighborIndex) {
-        boolean[] topBottom = {false, false};
-        if (isConnTop(index) || isConnTop(neighborIndex))
-            topBottom[0] = true;
-        if (isConnBottom(index) || isConnBottom(neighborIndex))
-            topBottom[1] = true;
-        uf.union(neighborIndex, index);
-        return topBottom;
+    private boolean[] checkNeighbor(int index, int neighbor, boolean[] tb) {
+        if (isConnTop(index) || isConnTop(neighbor))
+            tb[0] = true;
+        if (isConnBottom(index) || isConnBottom(neighbor))
+            tb[1] = true;
+        uf.union(index, neighbor);
+        return tb;
     }
     
     /**
@@ -93,6 +92,28 @@ public class Percolation {
      */
     private boolean isConnBottom(int index) {
         return toBottom[uf.find(index)];
+    }
+    
+    /**
+     * Sets whether the root of the given index is connected to the top.
+     * 
+     * @param index
+     * @param connected
+     * @return 
+     */
+    private void setTop(int index, boolean connected) {
+        toTop[uf.find(index)] = connected;
+    }
+    
+    /**
+     * Sets whether the root of the given index is connected to the bottom.
+     * 
+     * @param index
+     * @param connected
+     * @return 
+     */
+    private void setBottom(int index, boolean connected) {
+        toBottom[uf.find(index)] = connected;
     }
     
     /**
@@ -159,28 +180,28 @@ public class Percolation {
             boolean[] topBottom = {false, false};
             this.open[index] = true;
             this.openTotal++;
-            if (i == 1) connectTop(index);
-            if (i == n) connectBottom(index);
+            if (i == 1) topBottom[0] = true;
+            if (i == n) topBottom[1] = true;
             
             if ((i - 1 > 0) && (isOpen(i - 1, j))) {
                 int neighborIndex = ijTo1D(i - 1, j);
-                topBottom = checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
             }
             if ((i + 1 <= n) && (isOpen(i + 1, j))) {
                 int neighborIndex = ijTo1D(i + 1, j);
-                topBottom = checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
             }
             if ((j - 1 > 0) && (isOpen(i, j - 1))) {
                 int neighborIndex = ijTo1D(i, j - 1);
-                topBottom = checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
             }
             if ((j + 1 <= n) && (isOpen(i, j + 1))) {
                 int neighborIndex = ijTo1D(i, j + 1);
-                topBottom = checkNeighbor(index, neighborIndex);
+                topBottom = checkNeighbor(index, neighborIndex, topBottom);
             }
             
-            if (topBottom[0]) connectTop(index);
-            if (topBottom[1]) connectBottom(index);
+            setTop(index, topBottom[0]);
+            setBottom(index, topBottom[1]);
             if (isConnTop(index) && isConnBottom(index)) this.percolates = true;
         }
     }
