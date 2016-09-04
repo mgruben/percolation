@@ -25,6 +25,7 @@ import edu.princeton.cs.algs4.StdIn;
 public class PercolationStats {
     private final int n;
     private final int trials;
+    private final Percolation perc;
     
     public PercolationStats(int n, int trials) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
@@ -32,6 +33,7 @@ public class PercolationStats {
             throw new IllegalArgumentException("trials must be positive");
         this.n = n;
         this.trials = trials;
+        this.perc = new Percolation(this.n);
     }
     
     public double mean() {
@@ -53,5 +55,6 @@ public class PercolationStats {
     public static void main(String[] args) {
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);
+        PercolationStats ps = new PercolationStats(n, trials);
     }
 }
