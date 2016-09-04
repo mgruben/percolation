@@ -1,6 +1,7 @@
 
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
 import java.util.ArrayList;
 
 /*
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 public class PercolationStats {
     private final int n;
     private final int trials;
-    private final ArrayList<Double> thresholds = new ArrayList<>();
+    private final double[] thresholds;
     
     public PercolationStats(int n, int trials) throws IllegalArgumentException {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
@@ -35,6 +36,7 @@ public class PercolationStats {
             throw new IllegalArgumentException("trials must be positive");
         this.n = n;
         this.trials = trials;
+        this.thresholds = new double[this.trials];
         for (int i = 0; i < this.trials; i++) {
             Percolation perc = new Percolation(this.n);
             while (!perc.percolates()) {
@@ -42,16 +44,12 @@ public class PercolationStats {
                 int this_j = StdRandom.uniform(1, n + 1);
                 perc.open(this_i, this_j);
             }
-            thresholds.add(perc.getOpenTotal() / (double)(n*n));
+            thresholds[i] = perc.getOpenTotal() / (double)(n*n);
         }
     }
     
     public double mean() {
-        double sum = 0;
-        for (double i: this.thresholds) {
-            sum += i;
-        }
-        return sum / this.trials;
+        return StdStats.mean(this.thresholds);
     }
     
     public double stddev() {
