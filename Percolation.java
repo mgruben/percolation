@@ -81,7 +81,7 @@ public class Percolation {
             if (i - 1 > 0) if (isOpen(i - 1, j))
                 uf.union(ijTo1D(i - 1, j), ijTo1D(i, j));
             if (i + 1 <= n) if (isOpen(i + 1, j))
-                uf.union(ijTo1D(i+1, j), ijTo1D(i, j));
+                uf.union(ijTo1D(i + 1, j), ijTo1D(i, j));
             if (j - 1 > 0) if (isOpen(i, j - 1))
                 uf.union(ijTo1D(i, j - 1), ijTo1D(i, j));
             if (j + 1 <= n) if (isOpen(i, j + 1))
