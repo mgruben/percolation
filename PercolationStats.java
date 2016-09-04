@@ -39,7 +39,7 @@ public class PercolationStats {
      * @param trials
      * @throws IllegalArgumentException 
      */
-    public PercolationStats(int n, int trials) throws IllegalArgumentException {
+    public PercolationStats(int n, int trials) {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         if (trials <= 0)
             throw new IllegalArgumentException("trials must be positive");

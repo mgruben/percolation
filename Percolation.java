@@ -38,7 +38,7 @@ public class Percolation {
      * @param n, the dimension of the n*n grid to initialize
      * @throws IllegalArgumentException 
      */
-    public Percolation(int n) throws IllegalArgumentException {
+    public Percolation(int n) {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
         this.n = n;
         this.uf = new WeightedQuickUnionUF(this.n*this.n + 2);
@@ -70,7 +70,7 @@ public class Percolation {
      * @param j
      * @throws IndexOutOfBoundsException 
      */
-    public void open(int i, int j) throws IndexOutOfBoundsException {
+    public void open(int i, int j) {
         if (i < 1 && j < 1)
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
@@ -100,7 +100,7 @@ public class Percolation {
      * @return
      * @throws IndexOutOfBoundsException 
      */
-    public boolean isOpen(int i, int j) throws IndexOutOfBoundsException {
+    public boolean isOpen(int i, int j) {
         if (i < 1 && j < 1)
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
@@ -121,7 +121,7 @@ public class Percolation {
      * @return
      * @throws IndexOutOfBoundsException 
      */
-    public boolean isFull(int i, int j) throws IndexOutOfBoundsException {
+    public boolean isFull(int i, int j) {
         if (i < 1 && j < 1)
             throw new IndexOutOfBoundsException("i and j must be positive");
         if (i < 1) throw new IndexOutOfBoundsException("i must be positive");
